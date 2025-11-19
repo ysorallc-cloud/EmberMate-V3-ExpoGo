@@ -3,13 +3,14 @@
     "version": ">= 3.0.0"
   },
   "build": {
-    "android": {
-      "workflow": "managed",
-      "buildType": "app-bundle"
-    },
-    "ios": {
-      "workflow": "managed",
-      "releaseChannel": "production"
+    "production": {
+      "distribution": "store",
+      "android": {
+        "buildType": "app-bundle"
+      },
+      "ios": {
+        "buildConfiguration": "Release"
+      }
     }
   }
 }
