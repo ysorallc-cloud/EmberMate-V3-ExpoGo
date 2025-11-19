@@ -5,26 +5,54 @@
 
 import { Platform } from 'react-native';
 
-const tintColorLight = '#0a7ea4';
-const tintColorDark = '#fff';
+const Palette = {
+  deepTeal: '#003833',
+  forest: '#014C46',
+  evergreen: '#0E6A60',
+  duskTeal: '#1C6E66',
+  mist: '#6CB8AD',
+  sand: '#DDB08C',
+  sandLight: '#F0CBB0',
+  clay: '#6E7070',
+  coral: '#E89274',
+  pistachio: '#8AD0B3',
+  charcoal: '#0C1917',
+  night: '#021210',
+};
 
 export const Colors = {
   light: {
-    text: '#11181C',
-    background: '#fff',
-    tint: tintColorLight,
-    icon: '#687076',
-    tabIconDefault: '#687076',
-    tabIconSelected: tintColorLight,
+    text: Palette.sandLight,
+    background: Palette.forest,
+    tint: Palette.sand,
+    icon: Palette.mist,
+    surface: Palette.deepTeal,
+    surfaceMuted: '#08413B',
+    warning: Palette.coral,
+    positive: Palette.pistachio,
+    tabIconDefault: Palette.mist,
+    tabIconSelected: Palette.sand,
   },
   dark: {
-    text: '#ECEDEE',
-    background: '#151718',
-    tint: tintColorDark,
-    icon: '#9BA1A6',
-    tabIconDefault: '#9BA1A6',
-    tabIconSelected: tintColorDark,
+    text: Palette.sandLight,
+    background: Palette.night,
+    tint: Palette.sand,
+    icon: Palette.mist,
+    surface: '#072321',
+    surfaceMuted: '#031715',
+    warning: Palette.coral,
+    positive: Palette.pistachio,
+    tabIconDefault: Palette.mist,
+    tabIconSelected: Palette.sand,
   },
+};
+
+export { Palette };
+
+export const Gradients = {
+  canopy: [Palette.evergreen, Palette.deepTeal, Palette.charcoal],
+  bloom: [Palette.sandLight, Palette.sand],
+  dusk: ['#0A4D47', Palette.deepTeal],
 };
 
 export const Fonts = Platform.select({
