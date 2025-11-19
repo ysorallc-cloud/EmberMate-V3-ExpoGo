@@ -1,98 +1,287 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { StatusBar } from 'expo-status-bar';
+import { Ionicons } from '@expo/vector-icons/Ionicons';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { BreathingOrb } from '@/components/breathing-orb';
+import { Colors, Fonts, Palette } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
 
-export default function HomeScreen() {
+const quickActions = [
+  { label: 'Log Mood', icon: 'heart' },
+  { label: 'Log Symptom', icon: 'pulse' },
+  { label: 'Log Med', icon: 'medkit' },
+  { label: 'Care Moment', icon: 'cafe' },
+];
+
+const rhythmStory = [
+  {
+    title: 'What I experienced today',
+    chips: ['Morning meds', 'Light dizziness', 'Nap 20m'],
+    note: 'Energy dipped after morning meds.',
+  },
+  {
+    title: 'How it felt',
+    chips: ['Steady', 'Soft fatigue', 'Small win'],
+    note: 'Breathe exercise lowered stress.',
+  },
+  {
+    title: 'What helped',
+    chips: ['Hydration', 'Grounding', 'Support text'],
+    note: 'Coffee + water steadied nausea.',
+  },
+  {
+    title: 'What changed from yesterday',
+    chips: ['Better focus', 'Pain lighter', 'Sleep similar'],
+    note: 'Overall trend: gentle upswing.',
+  },
+];
+
+const caretakerFlags = ['Stable overall', 'Stress trending ↑', '1 follow-up flag'];
+
+export default function TodayScreen() {
+  const colorScheme = useColorScheme();
+  const theme = Colors[colorScheme ?? 'light'];
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <LinearGradient colors={[Palette.evergreen, Palette.deepTeal, Palette.charcoal]} style={styles.gradient}>
+      <StatusBar style="light" />
+      <SafeAreaView style={styles.safe} edges={['top', 'left', 'right']}>
+        <ScrollView contentContainerStyle={styles.content}>
+          <View style={styles.header}>
+            <View>
+              <Text style={styles.dayLabel}>Friday · 6:49 AM</Text>
+              <Text style={styles.cycleLabel}>Cycle 1 of 3</Text>
+            </View>
+            <TouchableOpacity style={styles.muteButton}>
+              <Ionicons name="volume-high" size={18} color={Palette.sandLight} />
+            </TouchableOpacity>
+          </View>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+          <View style={styles.orbContainer}>
+            <BreathingOrb />
+            <Text style={styles.orbPrompt}>Breathe out...</Text>
+            <Text style={styles.microNarrative}>Your day feels steady so far.</Text>
+          </View>
+
+          <View style={styles.reflectionCard}>
+            <Text style={styles.cardLabel}>One sentence from today…</Text>
+            <Text style={styles.placeholderText}>“Afternoon calm arrived after grounding and water.”</Text>
+          </View>
+
+          <View style={styles.quickActions}>
+            {quickActions.map(action => (
+              <TouchableOpacity key={action.label} style={styles.actionButton}>
+                <Ionicons name={action.icon as any} size={18} color={Palette.sandLight} />
+                <Text style={styles.actionLabel}>{action.label}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <View style={styles.storyGroup}>
+            {rhythmStory.map(section => (
+              <View key={section.title} style={styles.storyCard}>
+                <Text style={styles.storyTitle}>{section.title}</Text>
+                <View style={styles.chipRow}>
+                  {section.chips.map(chip => (
+                    <View key={chip} style={styles.chip}>
+                      <Text style={styles.chipText}>{chip}</Text>
+                    </View>
+                  ))}
+                </View>
+                <Text style={styles.storyNote}>{section.note}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={styles.feedbackCard}>
+            <Text style={styles.feedbackTitle}>Caretaker insight</Text>
+            <Text style={styles.feedbackCopy}>We’ll translate today’s rhythm into their daily summary.</Text>
+            <View style={styles.flagRow}>
+              {caretakerFlags.map(flag => (
+                <View key={flag} style={styles.flagChip}>
+                  <Text style={styles.flagText}>{flag}</Text>
+                </View>
+              ))}
+            </View>
+            <TouchableOpacity style={styles.ctaButton}>
+              <Text style={styles.ctaLabel}>Preview what they see</Text>
+              <Ionicons name="arrow-forward" size={16} color={theme.background} />
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
+  gradient: {
+    flex: 1,
+  },
+  safe: {
+    flex: 1,
+  },
+  content: {
+    padding: 24,
+    paddingBottom: 40,
+    gap: 20,
+  },
+  header: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  dayLabel: {
+    color: Palette.sandLight,
+    fontFamily: Fonts.rounded,
+    fontSize: 20,
+  },
+  cycleLabel: {
+    color: Palette.mist,
+    marginTop: 4,
+  },
+  muteButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    borderColor: 'rgba(255,255,255,0.2)',
+    borderWidth: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  orbContainer: {
+    alignItems: 'center',
+    gap: 12,
+  },
+  orbPrompt: {
+    fontSize: 28,
+    fontFamily: Fonts.rounded,
+    color: Palette.sandLight,
+  },
+  microNarrative: {
+    color: Palette.mist,
+    fontSize: 16,
+  },
+  reflectionCard: {
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    borderRadius: 20,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.08)',
+    gap: 10,
+  },
+  cardLabel: {
+    color: Palette.mist,
+    letterSpacing: 0.2,
+  },
+  placeholderText: {
+    color: Palette.sandLight,
+    fontSize: 18,
+  },
+  quickActions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+    justifyContent: 'space-between',
+  },
+  actionButton: {
+    flex: 1,
+    minWidth: '45%',
+    backgroundColor: 'rgba(0,0,0,0.2)',
+    paddingVertical: 14,
+    borderRadius: 18,
+    flexDirection: 'row',
+    justifyContent: 'center',
     alignItems: 'center',
     gap: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.08)',
   },
-  stepContainer: {
+  actionLabel: {
+    color: Palette.sandLight,
+    fontWeight: '600',
+  },
+  storyGroup: {
+    gap: 14,
+  },
+  storyCard: {
+    backgroundColor: 'rgba(0,0,0,0.25)',
+    borderRadius: 24,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.04)',
+    gap: 12,
+  },
+  storyTitle: {
+    color: Palette.sandLight,
+    fontSize: 18,
+    fontFamily: Fonts.rounded,
+  },
+  chipRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 8,
-    marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  chip: {
+    backgroundColor: 'rgba(255,255,255,0.08)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+  },
+  chipText: {
+    color: Palette.sandLight,
+    fontSize: 13,
+  },
+  storyNote: {
+    color: Palette.mist,
+  },
+  feedbackCard: {
+    backgroundColor: Palette.deepTeal,
+    borderRadius: 26,
+    padding: 24,
+    gap: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.08)',
+  },
+  feedbackTitle: {
+    color: Palette.sandLight,
+    fontSize: 18,
+    fontFamily: Fonts.rounded,
+  },
+  feedbackCopy: {
+    color: Palette.mist,
+  },
+  flagRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  flagChip: {
+    backgroundColor: 'rgba(138, 208, 179, 0.15)',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 999,
+    borderWidth: 1,
+    borderColor: 'rgba(138, 208, 179, 0.3)',
+  },
+  flagText: {
+    color: Palette.pistachio,
+    fontSize: 13,
+  },
+  ctaButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: Palette.sandLight,
+    paddingVertical: 14,
+    paddingHorizontal: 18,
+    borderRadius: 18,
+    marginTop: 4,
+  },
+  ctaLabel: {
+    color: Palette.deepTeal,
+    fontWeight: '600',
   },
 });
