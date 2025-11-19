@@ -1,0 +1,20 @@
+{
+  "cli": {
+    "version": ">= 3.0.0"
+  },
+  "build": {
+    "android": {
+      "workflow": "managed",
+      "buildType": "app-bundle"
+    },
+    "ios": {
+      "workflow": "managed",
+      "releaseChannel": "production"
+    }
+  },
+  "submit": {
+    "ios": {
+      "appleId": "amberrc1@yahoo.com
+}
+}
+}  
