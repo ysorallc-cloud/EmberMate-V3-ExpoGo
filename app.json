@@ -9,6 +9,10 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
 
+    "cli": {
+      "appVersionSource": "local"
+    },
+
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.ysora.embermate"
